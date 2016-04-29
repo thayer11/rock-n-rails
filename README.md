@@ -188,8 +188,8 @@ In `config/routes.rb`, add the following route(s):
 
 ```ruby
 get "/records" => "records#index", as: 'records'
-get "/records/:id" => "records#show", as: 'record' # add me!
 #get "/records/new" => "records#new", as: 'new_record'
+get "/records/:id" => "records#show", as: 'record' # add me!
 #post "/records" => "records#create"
 ```
 
@@ -253,8 +253,8 @@ In `config/routes.rb`, add the following route(s):
 
 ```ruby
 get "/records" => "records#index", as: 'records'
+get "/records/new" => "records#new", as: 'new_record'  # add me! order matters!
 get "/records/:id" => "records#show", as: 'record'
-get "/records/new" => "records#new", as: 'new_record'  # add me!
 #post "/records" => "records#create"
 ```
 
@@ -315,8 +315,8 @@ In `config/routes.rb`, add the following route(s):
 
 ```ruby
 get "/records" => "records#index", as: 'records'
-get "/records/:id" => "records#show", as: 'record'
 get "/records/new" => "records#new", as: 'new_record'
+get "/records/:id" => "records#show", as: 'record'
 post "/records" => "records#create"  # add me!
 ```
 
