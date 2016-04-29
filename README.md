@@ -210,7 +210,7 @@ get "/records/:id" => "records#show", as: 'record' # add me!
 
 * Refresh the page. What error do you see?
 
-* Let's create `views/records/index.html.erb` and add the following html:
+* Let's create `views/records/show.html.erb` and add the following html:
 
 ```html
 <h1>Rock 'n Rails! (records#show)</h1>
