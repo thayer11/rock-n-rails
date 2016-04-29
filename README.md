@@ -172,9 +172,8 @@ And then let's also update the view to render a list of records:
   <p>Title: <%= record.title %></p>
   <p>Artist: <%= record.artist %></p>
   <img src="<%= record.cover_art %>">
-  <!-- anchor tag that links to a show page -->
   <br>
-  <%= link_to "Show page", record_path(record) %>
+  <!-- anchor tag that links to a show page -->
   <a href="/records/<%= record.id %>">Show page</a><br> <!-- bad -->
   <%= link_to "Show page", record_path(record) %>       <!-- good -->
 <% end %>
