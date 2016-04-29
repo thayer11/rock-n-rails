@@ -115,6 +115,12 @@ get "/records" => "records#index", as: 'records'  # add me!
 
 * Now, refresh the page, and you should see it complain about a missing controller!
 
+Let's generate our records controller!
+
+```bash
+rails g controller records
+```
+
 In `records_controller.rb` let's add:
 
 ```ruby
