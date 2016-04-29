@@ -14,8 +14,9 @@ For this morning exercise we're going to be synthesizing all our Rails knowledge
 
 4) Submit the new record form to `record#create` to create a new record and then be redirected back to record index.
 
-###Models
+## Model
 
+#### `Record` Model
 A `Record` should have the following attributes:
 
 * title — String
@@ -23,40 +24,6 @@ A `Record` should have the following attributes:
 * year — Integer
 * cover_art — String
 * song_count — Integer
-
-###Guidance
-
-**See all the records on `records#index`**
-
-* Generate a new rails application with postgres as your default database:
-
-```bash
-rails new rock-n-rails -T -B -d postgresql
-cd rock-n-rails
-bundle
-# git init & git commit!
-```
-
-* Make sure that the postgres application is open! Otherwise the Rails server will not be able to connect to a database.
-
-* Generate a records controller with `index` `show` `new` and `create` actions:
-
-```bash
-rails g controller records index show new create
-```
-
-* Delete the generated routes and write RESTful routes that map to our records controller.
-
-`config/routes.rb`.
-
-```ruby
-get "/records" => "records#index"
-get "/records/new" => "records#new"
-post "/records" => "records#create"
-get "/records/:id" => "records#show"
-```
-
-* Generate a record model with the attributes `title` `artist` `year` `cover_art` and `song_count`
 
 ```bash
 rails g model record title:string artist:string year:integer cover_art:string song_count:integer
@@ -82,6 +49,9 @@ rails console
 > Record.create({title: "Test Record"})
 ```
 
+* Stop and commit!
+
+#### `Record` seed task
 * In `db/seeds.rb` create some records!
 
 `db/seeds.rb`.
@@ -123,20 +93,64 @@ rake db:seed
 
 * Check that everything was done correctly, run `rails console` or just `rails c` and inside run `Record.all`. Make sure that you can see an array of all the records from your seed file. Exit by typing `exit`.
 
-* Now that we have records in the database, let's render them to the view: `views/records/index.html.erb`
+* Stop and commit!
 
-`records_controller.rb`.
+
+## View, Routes, and Controllers
+**See all the records on `records#index`**
+
+* Start the server with `rails s` & head to `localhost:3000/records`
+    - You should see an error complaining that "no route matches...". What does that tell you?
+
+* Let's add our first RESTful route for our `Records` resource!
+
+In `config/routes.rb`, add the following route(s):
+
+```ruby
+get "/records" => "records#index", as: 'records'  # add me!
+#get "/records/:id" => "records#show", as: 'record'
+#get "/records/new" => "records#new", as: 'new_record'
+#post "/records" => "records#create"
+```
+
+* Now, refresh the page, and you should see it complain about a missing controller!
+
+Let's generate our records controller!
+
+```bash
+rails g controller records
+```
+
+In `records_controller.rb` let's add:
 
 ```ruby
 def index
-  @records = Record.all
+  render :index # optional
 end
 ```
 
-`views/records/index.html.erb`.
+* Refresh the page, and you should see it complain about a missing view!
+
+Let's create `views/records/index.html.erb` and add the following html:
 
 ```html
-<h1>Rock 'n Rails!</h1>
+<h1>Rock 'n Rails! (records#index)</h1>
+```
+
+* Refresh the page, and you should see the above HTML rendered. Yay!
+
+Now let's connect our model. Update your `index` action in `records_controller.rb` to grab all the records:
+
+``` ruby
+def index
+  @records = Record.all
+  # render :index
+end
+```
+
+And then let's also update the view to render a list of records:
+
+``` html
 <% @records.each do |record| %>
   <p>Title: <%= record.title %></p>
   <p>Artist: <%= record.artist %></p>
@@ -144,11 +158,11 @@ end
 <% end %>
 ```
 
-* Start the server with rails s & head to `localhost:3000/records`
+* Refresh the page and you should see your list of records! Good work!
 
 **See a single record on `record#show`**
 
-* For each record in the `record#index` view let's create an anchor tag that will link to `records/:id`
+* For each record in the `record#index` view let's create an anchor tag that will link to e.g. `records/1`, `records/2`, `records/3`
 
 `views/records/index.html.erb`.
 
@@ -160,21 +174,51 @@ end
   <img src="<%= record.cover_art %>">
   <!-- anchor tag that links to a show page -->
   <br>
-  <a href="/records/<%= record.id %>">Show page</a>
+  <%= link_to "Show page", record_path(record) %>
+  <a href="/records/<%= record.id %>">Show page</a><br> <!-- bad -->
+  <%= link_to "Show page", record_path(record) %>       <!-- good -->
 <% end %>
 ```
 
-* The `records#show` controller#action now needs to get the id from the parameters and use it to find the matching record in the database and pass it to the view.
+* Refresh the page, and click on one of the links. What error do you see?
 
-records_controller.rb
+* Let's add our second RESTful route for our `Records` resource!
+
+In `config/routes.rb`, add the following route(s):
 
 ```ruby
+get "/records" => "records#index", as: 'records'
+get "/records/:id" => "records#show", as: 'record' # add me!
+#get "/records/new" => "records#new", as: 'new_record'
+#post "/records" => "records#create"
+```
+
+* Refresh the page. What error do you see?
+
+* We need to create the `records#show` action now. And we need to grab the `id` from the parameters and use it to find the matching record in the database and pass it to the view.
+
+`records_controller.rb`
+
+```ruby
+  # ...
+
   def show
     @record = Record.find(params[:id])
+    render :show #optional
   end
 ```
 
-* In your `records#show` view, `views/records/show.html.erb` display the record that is being passed in.
+* Refresh the page. What error do you see?
+
+* Let's create `views/records/index.html.erb` and add the following html:
+
+```html
+<h1>Rock 'n Rails! (records#show)</h1>
+```
+
+* Refresh the page and make sure you see the HTML above rendered.
+
+* Now, in your `records#show` view, `views/records/show.html.erb` display the record that is being passed in.
 
 ```html
 <img src="<%= @record.cover_art %>">
@@ -182,6 +226,7 @@ records_controller.rb
 <h2>by <%= @record.artist %></h2>
 <p>Year: <%= @record.year %></p>
 <p>Song Count: <%= @record.song_count %></p>
+<%= link_to "Back", records_path %>
 ```
 
 **See a form to create a new record on `record#new`**
@@ -192,14 +237,42 @@ records_controller.rb
 <body>
 
 <!--Every page will have this link to create a new record-->
-<a href="/records/new">Make a New Record</a><br>
+<a href="/records/new">Make a New Record</a><br>        <!-- bad -->
+<%= link_to "Make a New Record", new_record_path %>     <!-- good -->
 
 <%= yield %>
 
 </body>
 ```
 
-* Now we have to edit the view in `/records/new.html.erb` and give it a form to create a new record. Let's make all fields required.
+When you visit `localhost:3000/records/new`, you should see an error.
+
+* Let's add our third RESTful route for our `Records` resource!
+
+In `config/routes.rb`, add the following route(s):
+
+```ruby
+get "/records" => "records#index", as: 'records'
+get "/records/:id" => "records#show", as: 'record'
+get "/records/new" => "records#new", as: 'new_record'  # add me!
+#post "/records" => "records#create"
+```
+
+* Refresh and you should see a new error, complaining about the controller.
+
+* We need to create the `records#new` action now.
+
+`records_controller.rb`
+
+```ruby
+  # ...
+
+  def new
+    render :new #optional
+  end
+```
+
+* Now we need to create `views/records/new.html.erb` using a rails HTML form helper. Let's make all fields required.
 
 ```html
 <%= form_for @record do |f| %>
@@ -222,14 +295,32 @@ records_controller.rb
 `app/controllers/records_controller.rb`
 
 ```ruby
+  # ...
+
   def new
     @record = Record.new
+    render :new #optional
   end
 ```
 
+* Refresh and you should see the rendered form!
+
 **Submit the new record form to `record#create` to create a new record and then be redirected back to record index.**
 
-* Now that our forms works, it will automatically `POST` to `/records` which hits our action#controller `records#create`. Nothing is happening in that controller as of yet so we need to actually create a new record there. In order to do that we must pull out the data submitted from our form from the `params` object and create a new record with it.
+* Now that our forms works, it will automatically `POST` to `/records`. Try it and you'll see our next error!
+
+* Let's add our fourth RESTful route for our `Records` resource!
+
+In `config/routes.rb`, add the following route(s):
+
+```ruby
+get "/records" => "records#index", as: 'records'
+get "/records/:id" => "records#show", as: 'record'
+get "/records/new" => "records#new", as: 'new_record'
+post "/records" => "records#create"  # add me!
+```
+
+* Nothing is happening in the `records#create` controller as of yet so we need to actually create a new record there. In order to do that we must pull out the data submitted from our form from the `params` object and create a new record with it.
 
 `app/controllers/records_controller.rb`.
 
@@ -271,4 +362,4 @@ end # end of class
   end
 ```
 
-Congrats! We've complete all the user stories! Reference a version of this app with the user stories complete [here](https://github.com/SF-WDI-LABS/rock-n-rails).
+Congrats! We've complete all the user stories! Please see the solution branch if you have questions!
