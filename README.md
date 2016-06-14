@@ -175,7 +175,7 @@ And then let's also update the view to render a list of records:
   <br>
   <!-- anchor tag that links to a show page -->
   <a href="/records/<%= record.id %>">Show page</a><br> <!-- bad -->
-  <%= link_to "Show page", records_path(record) %>       <!-- good -->
+  <%= link_to "Show page", record_path(record) %>       <!-- good -->
 <% end %>
 ```
 
