@@ -108,8 +108,8 @@ In `config/routes.rb`, add the following route(s):
 
 ```ruby
 get "/records" => "records#index", as: 'records'  # add me!
-#get "/records/:id" => "records#show", as: 'record'
 #get "/records/new" => "records#new", as: 'new_record'
+#get "/records/:id" => "records#show", as: 'record'
 #post "/records" => "records#create"
 ```
 
