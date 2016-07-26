@@ -9,6 +9,11 @@
   </head>
 
   <body>
-    <%= yield %>
+  	<!--Every page will have this link to create a new record-->
+	
+	<%= link_to "Make a New Record", new_record_path %>     <!-- good -->
+	
+	<%= yield %>
+
   </body>
 </html>
