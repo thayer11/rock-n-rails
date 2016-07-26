@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  artist: MyString
+  string: MyString
+  year: MyString
+  integer: MyString
+  conver_art: MyString
+  string: MyString
+  song_count: MyString
+  integer: MyString
+
+two:
+  title: MyString
+  artist: MyString
+  string: MyString
+  year: MyString
+  integer: MyString
+  conver_art: MyString
+  string: MyString
+  song_count: MyString
+  integer: MyString
