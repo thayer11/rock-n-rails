@@ -14,6 +14,17 @@ For this morning exercise we're going to be synthesizing all our Rails knowledge
 
 4) Submit the new record form to `record#create` to create a new record and then be redirected back to record index.
 
+Create a new rails app called ``records``.
+
+Here's a hint: 
+<details>
+```bash
+rails new records -d postgresql
+```
+</details>
+
+Change your directory to the new directory that rails just created.
+
 ## Model
 
 #### `Record` Model
@@ -157,6 +168,8 @@ And then let's also update the view to render a list of records:
 
 * Refresh the page and you should see your list of records! Good work!
 
+Commit again!
+
 **See a single record on `record#show`**
 
 * For each record in the `record#index` view let's create an anchor tag that will link to e.g. `records/1`, `records/2`, `records/3`
@@ -176,7 +189,7 @@ And then let's also update the view to render a list of records:
 <% end %>
 ```
 
-* Refresh the page, and click on one of the links. What error do you see?
+* Refresh the page, what error do you see?
 
 * Let's add our second RESTful route for our `Records` resource!
 
@@ -225,6 +238,8 @@ Here's a hint, if you need it:
 <%= link_to "Back", records_path %>
 ```
 
+Commit again!
+
 **See a form to create a new record on `record#new`**
 
 * Let's create a link on *every* page that will get us to a form that creates a new record, which lives on `/records/new`. We can edit the `application.html.erb` file which lives in `views/layouts/` to accomplish this. Inside the file add an anchor tag just above the `yield` statement in the `<body>`.
@@ -233,7 +248,6 @@ Here's a hint, if you need it:
 <body>
 
 <!--Every page will have this link to create a new record-->
-<a href="/records/new">Make a New Record</a><br>        <!-- bad -->
 <%= link_to "Make a New Record", new_record_path %>     <!-- good -->
 
 <%= yield %>
@@ -241,7 +255,7 @@ Here's a hint, if you need it:
 </body>
 ```
 
-When you visit `localhost:3000/records/new`, you should see an error.
+When you visit `localhost:3000/records/new`, you should see an error. What's show doing here?
 
 * Let's add our third RESTful route for our `Records` resource!
 
@@ -276,7 +290,7 @@ In `config/routes.rb`, add the following route(s):
   <span>Year: </span>
   <%= f.number_field :year, required: true %><br>
   <span>Cover art: </span>
-  <%= f.url_field :cover_art, required: true %><br>
+  <%= f.url_field :cover_art %><br>
   <span>Song count: </span>
   <%= f.number_field :song_count, required: true %><br>
   <%= f.submit %>
@@ -301,6 +315,8 @@ In `config/routes.rb`, add the following route(s):
 **Submit the new record form to `record#create` to create a new record and then be redirected back to record index.**
 
 * Now that our forms works, it will automatically `POST` to `/records`. Try it and you'll see our next error!
+
+Commit again!
 
 * Let's add our fourth RESTful route for our `Records` resource!
 
