@@ -25,21 +25,17 @@ A `Record` should have the following attributes:
 * cover_art — String
 * song_count — Integer
 
+Use Rails generators and Active Record rake tasks create a Record model and the matching table in the database.
+
+If you need a hint, here it is:
+
+<details>
 ```bash
 rails g model record title:string artist:string year:integer cover_art:string song_count:integer
-```
-
-* Create a database for your application to use
-
-```bash
 rake db:create
-```
-
-* Run the migration that was generated to create a new table in the database.
-
-```bash
 rake db:migrate
 ```
+</details>
 
 * Play with your new `Record` model in the rails console:
 
@@ -102,15 +98,12 @@ rake db:seed
 * Start the server with `rails s` & head to `localhost:3000/records`
     - You should see an error complaining that "no route matches...". What does that tell you?
 
-* Let's add our first RESTful route for our `Records` resource!
+* We'll build our Records resource one route at a time.
 
 In `config/routes.rb`, add the following route(s):
 
 ```ruby
-get "/records" => "records#index", as: 'records'  # add me!
-#get "/records/new" => "records#new", as: 'new_record'
-#get "/records/:id" => "records#show", as: 'record'
-#post "/records" => "records#create"
+  resources :records, only: [:index]
 ```
 
 * Now, refresh the page, and you should see it complain about a missing controller!
@@ -141,12 +134,16 @@ Let's create `views/records/index.html.erb` and add the following html:
 
 Now let's connect our model. Update your `index` action in `records_controller.rb` to grab all the records:
 
+If you need a hint, here it is:
+
+<details>
 ``` ruby
 def index
   @records = Record.all
   # render :index
 end
 ```
+</details>
 
 And then let's also update the view to render a list of records:
 
@@ -186,16 +183,15 @@ And then let's also update the view to render a list of records:
 In `config/routes.rb`, add the following route(s):
 
 ```ruby
-get "/records" => "records#index", as: 'records'
-#get "/records/new" => "records#new", as: 'new_record'
-get "/records/:id" => "records#show", as: 'record' # add me!
-#post "/records" => "records#create"
+  resources :records, only: [:index, :show]
 ```
 
 * Refresh the page. What error do you see?
 
 * We need to create the `records#show` action now. And we need to grab the `id` from the parameters and use it to find the matching record in the database and pass it to the view.
 
+Here's a hint, if you need it:
+<details>
 `records_controller.rb`
 
 ```ruby
@@ -206,6 +202,7 @@ get "/records/:id" => "records#show", as: 'record' # add me!
     render :show #optional
   end
 ```
+</details>
 
 * Refresh the page. What error do you see?
 
@@ -251,10 +248,7 @@ When you visit `localhost:3000/records/new`, you should see an error.
 In `config/routes.rb`, add the following route(s):
 
 ```ruby
-get "/records" => "records#index", as: 'records'
-get "/records/new" => "records#new", as: 'new_record'  # add me! order matters!
-get "/records/:id" => "records#show", as: 'record'
-#post "/records" => "records#create"
+  resources :records, only: [:index, :new, :show]
 ```
 
 * Refresh and you should see a new error, complaining about the controller.
@@ -313,10 +307,7 @@ get "/records/:id" => "records#show", as: 'record'
 In `config/routes.rb`, add the following route(s):
 
 ```ruby
-get "/records" => "records#index", as: 'records'
-get "/records/new" => "records#new", as: 'new_record'
-get "/records/:id" => "records#show", as: 'record'
-post "/records" => "records#create"  # add me!
+  resources :records, expect: [:delete, :edit, :update]
 ```
 
 * Nothing is happening in the `records#create` controller as of yet so we need to actually create a new record there. In order to do that we must pull out the data submitted from our form from the `params` object and create a new record with it.
