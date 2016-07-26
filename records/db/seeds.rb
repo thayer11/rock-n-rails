@@ -5,3 +5,29 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+# Wipe the database
+Record.destroy_all
+# Let's create a bunch of records
+Record.create([
+  {
+    title: "On Avery Island",
+    artist: "Neutral Milk Hotel",
+    year: 1996,
+    conver_art: "https://upload.wikimedia.org/wikipedia/en/7/73/On_avery_island_album_cover.jpg",
+    song_count: 12
+  },
+  {
+    title: "Everything All the Time",
+    artist: "Band of Horses",
+    year: 2006,
+    conver_art: "https://upload.wikimedia.org/wikipedia/en/5/51/BandofHorsesEverythingalltheTime.jpg",
+    song_count: 10
+  },
+  {
+    title: "The Flying Club Cup",
+    artist: "Beirut",
+    year: 2007,
+    conver_art: "https://upload.wikimedia.org/wikipedia/en/4/4c/The_Flying_Club_Cup.jpg",
+    song_count: 13
+  }
+])
