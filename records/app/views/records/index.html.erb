@@ -4,4 +4,8 @@
   <p>Title: <%= record.title %></p>
   <p>Artist: <%= record.artist %></p>
   <img src="<%= record.conver_art %>">
+ <br>
+  <!-- anchor tag that links to a show page -->
+  <%= link_to "Show page", record_path(record) %>       <!-- good -->
 <% end %>
+
